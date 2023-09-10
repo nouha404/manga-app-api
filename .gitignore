@@ -6,6 +6,20 @@ __pycache__/
 # C extensions
 *.so
 
+# GIT
+.git
+.gitignore
+
+# DOCKER
+.docker
+
+# Python
+app/__pycache__/
+app/*/__pycache__/
+app/*/*/__pycache__/
+app/*/*/*/__pycache__/
+
+
 # Distribution / packaging
 .Python
 build/
