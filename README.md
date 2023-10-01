@@ -1,2 +1,9 @@
 # manga-app-api
-Manga API project
+
+### Admin Interface
+<img src="./images/djangoInterface.png" />
+
+<p></p>
+
+### API
+<img src="./images/API.png" />

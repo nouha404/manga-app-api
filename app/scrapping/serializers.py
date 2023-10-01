@@ -15,5 +15,5 @@ class InformationsSerializer(serializers.ModelSerializer):
 class PagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pages
-        fields = ['name', 'chapters']
+        fields = '__all__'
         read_only_fields = ['name', 'chapters']
