@@ -24,3 +24,7 @@ class Pages(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def number_chapter(self):
+        return len(self.chapters) - 1

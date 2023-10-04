@@ -1,5 +1,12 @@
 from django.urls import path
-from .views import InformationsListView, PagesListView, get_specifique_chapter, get_only_chapter_with_his_number, get_number_valide
+from .views import (
+    InformationsListView,
+    PagesListView,
+    get_specifique_chapter,
+    get_only_chapter_with_his_number,
+    get_number_valide,
+    get_chapter_name,
+    )
 
 urlpatterns = [
     path(
@@ -22,5 +29,10 @@ urlpatterns = [
         'api/search/<str:chapter>/valide_number/',
         get_number_valide,
         name='valide-number'
+    ),
+    path(
+        'api/pages/<str:chapter>/chapter_name/',
+        get_chapter_name,
+        name='chapter-name'
     ),
 ]

@@ -33,7 +33,7 @@ class PagesListView(generics.ListAPIView):
 def get_specifique_chapter(request, chapter: str):
     pages = Pages.objects.filter(name__contains=chapter) #ok
 
-    if not pages or chapter == str(0):
+    if not pages or chapter == str(0) or chapter.startswith('0'):
         return Response(
             {'error': f'Chapter {chapter} not found'},
             status=status.HTTP_404_NOT_FOUND
@@ -50,16 +50,9 @@ def get_specifique_chapter(request, chapter: str):
 @api_view(['GET'])
 @authentication_classes([authentication.TokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
-def get_only_chapter_with_his_number(request, chapter: str, chapter_number:str):
-    """
-    Filtre for getting chapter with this number
-    :param HTTP request:
-    :param chapter:
-    :param chapter_number:
-    :return: Response with only chapter link
-    """
-    pages = Pages.objects.filter(name__contains=chapter) #dupliquer hein
-    if not pages or chapter == str(0):
+def get_chapter_name(request, chapter:str):
+    pages = Pages.objects.filter(name__contains=chapter)  # ok
+    if not pages or chapter == str(0) or chapter.startswith('0'):
         return Response(
             {'error': f'Chapter {chapter} not found'},
             status=status.HTTP_404_NOT_FOUND
@@ -70,12 +63,49 @@ def get_only_chapter_with_his_number(request, chapter: str, chapter_number:str):
         serializers_pages = PagesSerializer(pages, many=True).data
 
 
+    for chapterInSerializersPages in serializers_pages:
+        if str(1) <= chapter <= str(109) or str(11) <= chapter <= str(99):
+            page = Pages.objects.filter(name__contains=chapter)
+            s = PagesSerializer(page, many=True).data
+            last_page = []
+            for p in s:
+                last_page.append(p)
+            new_arr = []
+            for n in last_page:
+                new_arr.append(n['name'])
+            return Response(new_arr[-1])
+
+        return Response(chapterInSerializersPages['name'])
+
+
+
+
+
+
+@api_view(['GET'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def get_only_chapter_with_his_number(request, chapter: str, chapter_number: str):
+    """
+    Filtre for getting chapter with this number
+    :param HTTP request:
+    :param chapter:
+    :param chapter_number:
+    :return: Response with only chapter link
+    """
+    pages = Pages.objects.filter(name__contains=chapter) #dupliquer hein
+    if not pages or chapter == str(0) or chapter.startswith('0'):
+        return Response(
+            {'error': f'Chapter {chapter} not found'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    serializers_pages = []
+    for _ in pages:
+        serializers_pages = PagesSerializer(pages, many=True).data
+
     number_valide = []
     for chapterInSerializersPages in serializers_pages:
-        errors = {
-            'error': f'Chapter number invalide for chapter {chapter}',
-            'chapter number valide': [vld for vld in number_valide if vld != 'None']
-        }
         for chapters in chapterInSerializersPages['chapters']:
             if chapters is None:
                 chapters = str(chapters)
@@ -104,6 +134,10 @@ def get_only_chapter_with_his_number(request, chapter: str, chapter_number:str):
                         return Response(ERR,status=status.HTTP_404_NOT_FOUND)
             if chapter_numberValid in chapters:
                 return Response(chapters)
+        errors = {
+            'error': f'Chapter number invalide for chapter {chapter}',
+            'chapter number valide': [vld for vld in number_valide if vld != 'None']
+        }
         return Response(errors,status=status.HTTP_404_NOT_FOUND)
 
 
@@ -118,7 +152,7 @@ def get_number_valide(request, chapter: str):
     :return Response with an array who content valid number:
     """
     pages = Pages.objects.filter(name__contains=chapter) #dupliquer hein
-    if not pages or chapter == str(0):
+    if not pages or chapter == str(0) or chapter.startswith('0'):
         return Response(
             {'error': f'Chapter {chapter} not found'},
             status=status.HTTP_404_NOT_FOUND
