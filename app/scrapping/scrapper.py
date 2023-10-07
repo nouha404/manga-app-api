@@ -17,6 +17,7 @@ headers = {
     )
 }
 
+
 def get_informations(url: str):
 
     response = requests.get(url, headers=headers)
@@ -25,32 +26,27 @@ def get_informations(url: str):
     search_date_release = infos.find('dt', text='Date de sortie')
     search_category_dt = infos.find('dt', text='Catégories')
 
-    #ârtie date chapitre a gerer
-
-
-
-    manga_title = soup.find('h2', class_='widget-title').text
     release_date = search_date_release.find_next_sibling('dd').text
     author = infos.findAll('dd')[2].text.replace('\n', '')
     category = search_category_dt.find_next_sibling('dd').text
     resume = soup.find('div', class_='well').p.text
-
+    manga_title = soup.find('h2', class_='widget-title').text
     existing_info = Informations.objects.filter(
         release_date=release_date,
         author=author,
         category=category,
-        resume=resume
+        resume=resume,
+        manga_title=manga_title
     ).first()
     if not existing_info:
         informations = Informations.objects.create(
-            manga_title=manga_title,
             release_date=release_date,
             author=author,
             resume=resume,
-            category=category
+            category=category,
+            manga_title=manga_title,
         )
         return informations
-
 
 
 url_piece = 'https://www.scan-vf.net/one_piece'
@@ -141,3 +137,4 @@ get_scan_names(boruto_informations, boruto_all_chapters)
 get_scan_names(black_clover_informations, black_clover_all_chapters)
 get_scan_names(snk_informations, snk_all_chapters)
 get_scan_names(bleach_informations, bleach_all_chapters)
+

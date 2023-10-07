@@ -1,3 +1,4 @@
+from django.utils.text import slugify
 from rest_framework import generics, authentication, permissions, status
 from .models import Informations, Pages
 from .permissions import NoCreatePermission
@@ -9,6 +10,7 @@ from rest_framework.decorators import (
     authentication_classes,
     permission_classes
 )
+from pprint import pprint
 
 
 class InformationsListView(generics.ListAPIView):
@@ -20,158 +22,181 @@ class InformationsListView(generics.ListAPIView):
 
 
 class PagesListView(generics.ListAPIView):
+    """
+    Get all pages with a specific manga title.
+
+    This view returns a list of pages for a specified manga title. It requires authentication
+    and only allows authenticated users to access it. Additionally, it enforces a permission
+    called 'NoCreatePermission,' which restricts users from creating new pages.
+
+    Attributes:
+        serializer_class (PagesSerializer): The serializer class used for serializing page data.
+        authentication_classes (list): The authentication classes used for this view.
+        permission_classes (list): The permission classes applied to this view.
+
+    Methods:
+        get_queryset(): Returns a queryset of pages filtered by the specified manga title.
+        list(): Retrieves the queryset, checks if it's empty, and returns serialized data or a 404 error.
+
+    """
     serializer_class = PagesSerializer
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated, NoCreatePermission]
 
-    queryset = Pages.objects.all()
+    def get_queryset(self):
+        manga_title = self.kwargs['manga_title']
+        queryset = Pages.objects.filter(informations__manga_title__icontains=manga_title)
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        # Si le queryset est vide, vous pouvez renvoyer une réponse 404
+        if not queryset:
+            return Response(
+                {'error': f'{self.kwargs["manga_title"]} not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+def filtre_pages_by_chapter(chapter):
+    return Pages.objects.filter(name__contains=chapter)
 
 
 @api_view(['GET'])
 @authentication_classes([authentication.TokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
-def get_specifique_chapter(request, chapter: str):
-    pages = Pages.objects.filter(name__contains=chapter) #ok
-
-    if not pages or chapter == str(0) or chapter.startswith('0'):
-        return Response(
-            {'error': f'Chapter {chapter} not found'},
-            status=status.HTTP_404_NOT_FOUND
-        )
-    elif str(1) <= chapter <= str(109) or str(11) <= chapter <= str(99):
-        page = Pages.objects.filter(name__contains=chapter)
-        s = PagesSerializer(page, many=True)
-        return Response(s.data[-1])
-
-    serializer = PagesSerializer(pages, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-@authentication_classes([authentication.TokenAuthentication])
-@permission_classes([permissions.IsAuthenticated])
-def get_chapter_name(request, chapter:str):
-    pages = Pages.objects.filter(name__contains=chapter)  # ok
-    if not pages or chapter == str(0) or chapter.startswith('0'):
-        return Response(
-            {'error': f'Chapter {chapter} not found'},
-            status=status.HTTP_404_NOT_FOUND
-        )
-
-    serializers_pages = []
-    for _ in pages:
-        serializers_pages = PagesSerializer(pages, many=True).data
-
-
-    for chapterInSerializersPages in serializers_pages:
-        if str(1) <= chapter <= str(109) or str(11) <= chapter <= str(99):
-            page = Pages.objects.filter(name__contains=chapter)
-            s = PagesSerializer(page, many=True).data
-            last_page = []
-            for p in s:
-                last_page.append(p)
-            new_arr = []
-            for n in last_page:
-                new_arr.append(n['name'])
-            return Response(new_arr[-1])
-
-        return Response(chapterInSerializersPages['name'])
-
-
-
-
-
-
-@api_view(['GET'])
-@authentication_classes([authentication.TokenAuthentication])
-@permission_classes([permissions.IsAuthenticated])
-def get_only_chapter_with_his_number(request, chapter: str, chapter_number: str):
+def get_specifique_chapter(request, manga_title: str, chapter: str):
     """
-    Filtre for getting chapter with this number
-    :param HTTP request:
-    :param chapter:
-    :param chapter_number:
-    :return: Response with only chapter link
+    Get images about number chapitre  of manga title
+    :param request: HTTP GET request
+    :param manga_title: Title of the manga
+    :param chapter: Chapter number
+    :return: List of images for the specified chapter
+
+
+    This view takes a manga title and chapter number as input and retrieves images for the specified chapter.
+    It first searches for pages containing the chapter number and validates the manga title.
+    If the manga title is "One Piece," it handles it as a special case.
+    If valid chapters are found, it returns a list of images for that chapter.
+    If no valid chapters are found, it returns an HTTP 404 error with a message indicating the issue.
     """
-    pages = Pages.objects.filter(name__contains=chapter) #dupliquer hein
-    if not pages or chapter == str(0) or chapter.startswith('0'):
+    pages = filtre_pages_by_chapter(chapter)
+    serializers_pages = PagesSerializer(pages, many=True).data
+
+    slug_manga_title = slugify(manga_title)
+
+    if manga_title == 'one piece' or manga_title.lower() == 'one piece':
+        slug_manga_title = 'one_piece'
+    chaptre_valid = f'chapitre-{chapter}/'
+
+    finding_chapters = []
+    is_founding = False
+    for chaptr in serializers_pages:
+        for cpt in chaptr['chapters']:
+            if cpt is not None and slug_manga_title in cpt and chaptre_valid in cpt:
+                finding_chapters.append(cpt)
+                is_founding = True
+
+    if not is_founding:
         return Response(
-            {'error': f'Chapter {chapter} not found'},
+            {'error': f' {manga_title} not found'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    if not pages:
+        return Response(
+            {'error': f'Chapter {chapter} not found, check for valid chapters.'},
             status=status.HTTP_404_NOT_FOUND
         )
 
-    serializers_pages = []
-    for _ in pages:
-        serializers_pages = PagesSerializer(pages, many=True).data
+    return Response(finding_chapters)
 
-    number_valide = []
-    for chapterInSerializersPages in serializers_pages:
-        for chapters in chapterInSerializersPages['chapters']:
-            if chapters is None:
-                chapters = str(chapters)
-            extract_url = Path(chapters)
-            number_valide.append(extract_url.stem)
 
-            chapter_numberValid = f'chapitre-{chapter}/{chapter_number}.webp'
+@api_view(['GET'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_manga_present(request):
+    """
+    Get a list of all valid mangas present in our database.
 
-            specifique_url = []
-            if str(1) <= chapter <= str(109) or str(11) <= chapter <= str(99):
-                page = Pages.objects.filter(name__contains=chapter)
-                s = PagesSerializer(page, many=True)
-                nbValide = []
-                for url in s.data[-1]['chapters']:
-                    if url is not None:
-                        specifique_url.append(url)
-                        err = Path(url)
-                        if chapter_numberValid in url:
-                            return Response(url)
-                        nbValide.append(err.stem)
-                    else:
-                        ERR = {
-                        'error': f'Chapter number invalide for chapter {chapter}',
-                        'chapter number valide': [vld for vld in nbValide]
+    :param request: HTTP GET request
+    :return: List of all manga titles
+    :rtype: Response
+
+    This view retrieves a list of all valid manga titles present in our database.
+    It requires authentication and is only accessible to authenticated users.
+    It returns a list of manga titles as a response.
+    """
+    manga_titles = Informations.objects.values_list('manga_title', flat=True).distinct()
+    return Response(manga_titles)
+
+
+@api_view(['GET'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def get_chapter_name(request, manga_title: str, chapter: str, page_number: str):
+    """
+    Get the image URL and information about a specific chapter of a manga.
+
+    :param request: HTTP GET request
+    :param manga_title: Title of the manga
+    :param chapter: Chapter number
+    :param page_number: Page number
+    :return: Information about the chapter and URL of the image for the specified page
+    :rtype: Response
+
+    This view retrieves the image URL and other information about a specific page of a manga chapter.
+    It requires authentication and is accessible only to authenticated users.
+    Users can provide the manga title, chapter number, and page number as parameters.
+    The view searches for the corresponding image URL and returns information about the chapter and the image URL as a response.
+    If the provided chapter or page number is invalid, it returns an error response.
+    """
+    pages = Pages.objects.filter(name__contains=chapter)
+    serializers_pages = PagesSerializer(pages, many=True).data
+
+    slug_manga_title = slugify(manga_title)
+
+    if manga_title == 'one piece' or manga_title.lower() == 'one piece':
+        slug_manga_title = 'one_piece'
+
+    chaptre_valid = f'chapitre-{chapter}/'
+    number_valid = []
+    finding_chapters = []
+    is_founding = False
+    for chaptr in serializers_pages:
+        for cpt in chaptr['chapters']:
+
+            if cpt is not None and slug_manga_title in cpt and chaptre_valid in cpt:
+                finding_chapters.append(cpt)
+                extract_url = Path(cpt)
+                number_valid.append(extract_url.stem)
+                is_founding = True
+
+                if page_number == str(0):
+                    return Response(
+                        {'error': f'Chapter {page_number} not found'},
+                        status=status.HTTP_404_NOT_FOUND
+                    )
+                elif page_number in extract_url.stem:
+                    return Response(
+                        {
+                            'id': chaptr['id'],
+                            'title': chaptr['name'],
+                            'image': cpt
                         }
-                        return Response(ERR,status=status.HTTP_404_NOT_FOUND)
-            if chapter_numberValid in chapters:
-                return Response(chapters)
-        errors = {
-            'error': f'Chapter number invalide for chapter {chapter}',
-            'chapter number valide': [vld for vld in number_valide if vld != 'None']
-        }
-        return Response(errors,status=status.HTTP_404_NOT_FOUND)
-
-
-@api_view(['GET'])
-@authentication_classes([authentication.TokenAuthentication])
-@permission_classes([permissions.IsAuthenticated])
-def get_number_valide(request, chapter: str):
-    """
-    Get valide numbers for specifique chapter
-    :param HTTP request:
-    :param searching chapter:
-    :return Response with an array who content valid number:
-    """
-    pages = Pages.objects.filter(name__contains=chapter) #dupliquer hein
-    if not pages or chapter == str(0) or chapter.startswith('0'):
+                    )
+    if not is_founding:
         return Response(
-            {'error': f'Chapter {chapter} not found'},
+            {'error': f' {manga_title} not found'},
             status=status.HTTP_404_NOT_FOUND
         )
-
-    serializers_pages = []
-    for _ in pages:
-        serializers_pages = PagesSerializer(pages, many=True).data
-
-    number_valide = []
-
-    for chapterInSerializersPages in serializers_pages:
-
-        for chapters in chapterInSerializersPages['chapters']:
-            if chapters is None:
-                chapters = str(chapters)
-            extract_url = Path(chapters)
-            number_valide.append(extract_url.stem)
-    errors = {
-        f' Number valide for chapter {chapter}': [vld for vld in number_valide if vld != 'None']
-    }
-    return Response(errors,status=status.HTTP_404_NOT_FOUND)
+    else:
+        ERR = {
+            'error': f'page number {page_number} invalide for chapter {chapter}',
+            'chapter number valide': [vld for vld in number_valid]
+        }
+        return Response(ERR, status=status.HTTP_404_NOT_FOUND)

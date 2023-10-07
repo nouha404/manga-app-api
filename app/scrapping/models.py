@@ -2,10 +2,11 @@ from django.db import models
 
 
 class Informations(models.Model):
-    release_date = models.CharField(max_length=5)
+    release_date = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     resume = models.TextField()
     category = models.CharField(max_length=255)
+    manga_title = models.CharField(max_length=255, null=False)
 
     class Meta:
         verbose_name = 'Information'
@@ -15,8 +16,9 @@ class Informations(models.Model):
 
 
 class Pages(models.Model):
+
     informations = models.ForeignKey(Informations, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True)
     chapters = models.JSONField()
 
     class Meta:
