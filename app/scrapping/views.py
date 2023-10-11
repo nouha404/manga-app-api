@@ -14,6 +14,31 @@ from pprint import pprint
 
 
 class InformationsListView(generics.ListAPIView):
+    """
+        InformationsListView is a view that provides a list of manga information entries.
+
+    This view allows authenticated users to retrieve a list of manga information entries stored in the database.
+    It does not support the creation of new entries.
+
+    Attributes:
+        serializer_class (class): The serializer class used to serialize the retrieved data.
+        authentication_classes (list): The authentication classes required for access.
+        permission_classes (list): The permission classes required for access.
+        queryset (QuerySet): The set of manga information entries to be retrieved.
+
+    Usage:
+        To access the list of manga information entries, make a GET request to the corresponding endpoint.
+
+    Example:
+        ```
+        GET /api/informations/
+        ```
+
+     Note:
+    - Authentication with a valid token is required to access this view.
+    - Only users with the 'IsAuthenticated' permission are allowed to retrieve data.
+    - This view does not support the creation of new entries.
+    """
     serializer_class = InformationsSerializer
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated, NoCreatePermission]
@@ -23,7 +48,7 @@ class InformationsListView(generics.ListAPIView):
 
 class PagesListView(generics.ListAPIView):
     """
-    Get all pages with a specific manga title.
+        Get all pages with a specific manga title.
 
     This view returns a list of pages for a specified manga title. It requires authentication
     and only allows authenticated users to access it. Additionally, it enforces a permission
@@ -37,6 +62,20 @@ class PagesListView(generics.ListAPIView):
     Methods:
         get_queryset(): Returns a queryset of pages filtered by the specified manga title.
         list(): Retrieves the queryset, checks if it's empty, and returns serialized data or a 404 error.
+
+     Usage:
+        To access a list of pages for a specific manga title, make a GET request to the corresponding endpoint, providing
+        the manga title as a URL parameter.
+
+    Example:
+        ```
+        GET /api/pages/?manga_title=my_manga
+        ```
+
+    Note:
+    - Authentication with a valid token is required to access this view.
+    - Only users with the 'IsAuthenticated' permission are allowed to retrieve data.
+    - This view enforces the 'NoCreatePermission,' preventing users from creating new pages.
 
     """
     serializer_class = PagesSerializer
@@ -72,6 +111,35 @@ class PagesListView(generics.ListAPIView):
 @authentication_classes([authentication.TokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
 def get_specifique_information(request, manga_name: str):
+    """
+        Get specific manga information by name.
+
+    This view allows authenticated users to retrieve manga information entries with a specific manga name. It requires
+    a valid token for authentication and enforces the 'IsAuthenticated' permission.
+
+    Parameters:
+        :type request: object
+        :param manga_name: (str): The manga name to search for. Case-insensitive.
+
+    Returns:
+        A list of manga information entries with matching manga names.
+
+    Usage:
+        To access manga information for a specific manga name, make a GET request to the corresponding endpoint,
+        providing the manga name as a URL parameter.
+
+    Example:
+        ```
+        GET /api/get_specific_information/?manga_name=my_manga
+        ```
+
+    Note:
+    - Authentication with a valid token is required to access this view.
+    - Only users with the 'IsAuthenticated' permission are allowed to retrieve data.
+    - The manga name is treated in a case-insensitive manner.
+    - If the manga name is not found, a 404 error response is returned.
+
+    """
     manga_name = manga_name.title()
 
     informations = Informations.objects.filter(manga_title__contains=manga_name)
@@ -104,17 +172,35 @@ def filtre_pages_by_chapter(chapter):
 def get_specifique_chapter(request, manga_title: str, chapter: str):
     """
     Get images about number chapitre  of manga title
-    :param request: HTTP GET request
-    :param manga_title: Title of the manga
-    :param chapter: Chapter number
-    :return: List of images for the specified chapter
-
 
     This view takes a manga title and chapter number as input and retrieves images for the specified chapter.
     It first searches for pages containing the chapter number and validates the manga title.
     If the manga title is "One Piece," it handles it as a special case.
     If valid chapters are found, it returns a list of images for that chapter.
     If no valid chapters are found, it returns an HTTP 404 error with a message indicating the issue.
+
+    Parameters:
+        :type request: object
+        :param manga_title: (str): The title of the manga.
+        :param chapter: (str) : The chapter number to search for.
+
+    Returns:
+        A list of images for the specified chapter.
+
+    Usage:
+        To access images for a specific chapter of a manga, make a GET request to the corresponding endpoint,
+        providing the manga title and chapter number as URL parameters.
+
+    Example:
+        ```
+        GET /api/get_specifique_chapter/?manga_title=my_manga&chapter=5
+        ```
+
+    Note:
+        - Authentication with a valid token is required to access this view.
+        - Only users with the 'IsAuthenticated' permission are allowed to retrieve data.
+        - The manga title is case-insensitive.
+        - If the manga title or chapter is not found, a 404 error response is returned.
     """
     pages = filtre_pages_by_chapter(chapter)
     serializers_pages = PagesSerializer(pages, many=True).data
@@ -152,15 +238,26 @@ def get_specifique_chapter(request, manga_title: str, chapter: str):
 @permission_classes([permissions.IsAuthenticated])
 def get_all_manga_present(request):
     """
-    Get a list of all valid mangas present in our database.
-
-    :param request: HTTP GET request
-    :return: List of all manga titles
-    :rtype: Response
+        Get a list of all valid mangas present in our database.
 
     This view retrieves a list of all valid manga titles present in our database.
     It requires authentication and is only accessible to authenticated users.
     It returns a list of manga titles as a response.
+
+    Returns:
+        A list of all manga titles present in the database.
+
+    Usage:
+        To access a list of all valid manga titles in the database, make a GET request to the corresponding endpoint.
+
+    Example:
+        ```
+        GET /api/get_all_manga_present/
+        ```
+
+    Note:
+    - Authentication with a valid token is required to access this view.
+    - Only users with the 'IsAuthenticated' permission are allowed to retrieve data.
     """
     manga_titles = Informations.objects.values_list('manga_title', flat=True).distinct()
     return Response(manga_titles)
@@ -171,20 +268,35 @@ def get_all_manga_present(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_chapter_name(request, manga_title: str, chapter: str, page_number: str):
     """
-    Get the image URL and information about a specific chapter of a manga.
+        Get the image URL and information about a specific chapter of a manga.
 
-    :param request: HTTP GET request
-    :param manga_title: Title of the manga
-    :param chapter: Chapter number
-    :param page_number: Page number
-    :return: Information about the chapter and URL of the image for the specified page
-    :rtype: Response
+    This view retrieves the image URL and other information about a specific page of a manga chapter. It requires
+    authentication and is accessible only to authenticated users. Users can provide the manga title, chapter number,
+    and page number as parameters. The view searches for the corresponding image URL and returns information about
+    the chapter and the image URL as a response. If the provided chapter or page number is invalid, it returns an
+    error response.
 
-    This view retrieves the image URL and other information about a specific page of a manga chapter.
-    It requires authentication and is accessible only to authenticated users.
-    Users can provide the manga title, chapter number, and page number as parameters.
-    The view searches for the corresponding image URL and returns information about the chapter and the image URL as a response.
-    If the provided chapter or page number is invalid, it returns an error response.
+     Parameters:
+        :type request: object
+        :param manga_title: (str): The title of the manga.
+        :param chapter: (str): The chapter number.
+        :param page_number: (str): The page number.
+
+    Returns:
+        Information about the chapter and URL of the image for the specified page.
+
+    Usage:
+        To access information and the image URL for a specific page of a manga chapter, make a GET request to the
+        corresponding endpoint, providing the manga title, chapter number, and page number as URL parameters.
+
+    Example:
+        ```
+        GET /api/get_chapter_name/?manga_title=my_manga&chapter=5&page_number=1
+        ```
+
+    Note:
+    - Authentication with a valid token is required to access this view.
+    - Only users with the 'IsAuthenticated' permission are allowed to retrieve data.
     """
     pages = Pages.objects.filter(name__contains=chapter)
     serializers_pages = PagesSerializer(pages, many=True).data
