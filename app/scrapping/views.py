@@ -52,7 +52,6 @@ class PagesListView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
 
-        # Si le queryset est vide, vous pouvez renvoyer une réponse 404
         if not queryset:
             return Response(
                 {'error': f'{self.kwargs["manga_title"]} not found'},
@@ -60,7 +59,39 @@ class PagesListView(generics.ListAPIView):
             )
 
         serializer = self.get_serializer(queryset, many=True)
+        for item in serializer.data:
+            informations = item.get('informations')
+            if informations and isinstance(informations, dict):
+                manga_title = informations.get('manga_title')
+                if manga_title and isinstance(manga_title, str):
+                    item['informations']['manga_title'] = manga_title.title()
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def get_specifique_information(request, manga_name: str):
+    manga_name = manga_name.title()
+
+    informations = Informations.objects.filter(manga_title__contains=manga_name)
+    serializers_infos = InformationsSerializer(informations, many=True).data
+
+    finding_infos = []
+    is_founding = False
+
+    for info in serializers_infos:
+        if manga_name in info['manga_title']:
+            finding_infos.append(info)
+            is_founding = True
+
+    if not is_founding:
+        return Response(
+            {'error': f' {manga_name} not found, write the name correctly."'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    return Response(finding_infos)
 
 
 def filtre_pages_by_chapter(chapter):

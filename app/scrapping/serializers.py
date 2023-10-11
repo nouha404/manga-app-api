@@ -8,7 +8,7 @@ from scrapping.models import (
 class InformationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Informations
-        fields = ['release_date', 'author', 'resume', 'category']
+        fields = ['release_date', 'author', 'resume', 'category', 'manga_title']
         read_only_fields = ['release_date', 'author', 'resume', 'category']
 
 
