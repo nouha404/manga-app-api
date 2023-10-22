@@ -6,6 +6,7 @@ from .views import (
     get_chapter_name,
     get_all_manga_present,
     get_specifique_information,
+    get_specifique_chapter_title,
 )
 
 urlpatterns = [
@@ -33,8 +34,13 @@ urlpatterns = [
         name='pages-detail'
     ),
     path(
+        'api/search/<str:manga_title>/<str:chapter>/chapter_title',
+        get_specifique_chapter_title,
+        name='page-title',
+    ),
+    path(
         'api/pages/<str:manga_title>/<str:chapter>/<str:page_number>/infos_for_specifique_chapter/',
         get_chapter_name,
         name='chapter-name'
-    ),
+    )
 ]

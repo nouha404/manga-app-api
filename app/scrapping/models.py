@@ -6,7 +6,7 @@ class Informations(models.Model):
     author = models.CharField(max_length=255)
     resume = models.TextField()
     category = models.CharField(max_length=255)
-    manga_title = models.CharField(max_length=255, null=False)
+    manga_title = models.CharField(max_length=255, null=False, default="unknown")
 
     class Meta:
         verbose_name = 'Information'

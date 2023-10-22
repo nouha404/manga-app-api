@@ -236,6 +236,69 @@ def get_specifique_chapter(request, manga_title: str, chapter: str):
 @api_view(['GET'])
 @authentication_classes([authentication.TokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
+def get_specifique_chapter_title(request, manga_title: str, chapter: str):
+    """
+        Get the full title of a specific chapter of a manga.
+
+        This view takes a manga title and chapter number as input and retrieves the full title of the specified chapter.
+        It first searches for pages containing the chapter number and validates the manga title.
+        If the manga title is "One Piece," it handles it as a special case.
+        If valid chapters are found, it returns the full title of the chapter.
+        If no valid chapters are found, it returns an HTTP 404 error with a message indicating the issue.
+
+        Parameters:
+            :type request: object
+            :param manga_title: (str): The title of the manga.
+            :param chapter: (str) : The chapter number to search for.
+
+        Returns:
+            The full title of the specified chapter as a string.
+
+        Usage:
+            To retrieve the full title of a specific chapter of a manga, make a GET request to the corresponding endpoint,
+            providing the manga title and chapter number as URL parameters.
+
+        Example:
+            ```
+            GET /api/get_specifique_chapter_title/?manga_title=my_manga&chapter=5
+            ```
+        Note:
+            - Authentication with a valid token is required to access this view.
+            - Only users with the 'IsAuthenticated' permission are allowed to retrieve data.
+            - The manga title is case-insensitive.
+            - If the manga title or chapter is not found, a 404 error response is returned.
+    """
+    pages = filtre_pages_by_chapter(chapter)
+    serializers_pages = PagesSerializer(pages, many=True).data
+
+    finding_chapters = []
+    is_founding = False
+    for chaptr in serializers_pages:
+
+        for cpt in chaptr['name']:
+            if cpt:
+                finding_chapters.append(cpt)
+                is_founding = True
+
+    full_title = ''.join(finding_chapters)
+    if not is_founding:
+        return Response(
+            {'error': f' {manga_title} not found'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    if not pages:
+        return Response(
+            {'error': f'Chapter {chapter} not found, check for valid chapters.'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    return Response(full_title)
+
+
+
+@api_view(['GET'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
 def get_all_manga_present(request):
     """
         Get a list of all valid mangas present in our database.
