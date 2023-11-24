@@ -274,7 +274,6 @@ def get_specifique_chapter_title(request, manga_title: str, chapter: str):
     finding_chapters = []
     is_founding = False
     for chaptr in serializers_pages:
-
         for cpt in chaptr['name']:
             if cpt:
                 finding_chapters.append(cpt)

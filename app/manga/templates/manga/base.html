@@ -1,0 +1,224 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <title>O'SCANS</title>
+</head>
+
+
+
+{% block stylesheet %}
+<style>
+
+    @font-face {
+        font-family: 'Boldly Missy';
+        src: url('{% static "fonts/BoldlyMissy.otf" %}') format('opentype');
+
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+
+        background: black;
+        color:purple;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        font-family: 'Boldly Missy', sans-serif;
+
+    }
+    section {
+        background: #FCE9F1;
+        width: 98%;
+        height: 100vh;
+        border: 1px solid #080202;
+        border-radius: 30px;
+
+    }
+
+    section nav .container {
+        height: 10vh;
+
+    }
+
+    section nav #navbarNav {
+        height: 81px;
+        width: 50%;
+
+    }
+
+    section nav #navbarNav ul.navbar-nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 90%;
+        border-radius: 0px 0px 50px 50px;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        background: black;
+    }
+
+
+
+
+
+    section nav .container a.logo {
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+    section  .container .content {
+        margin-top: 45px;
+    }
+    .content p {
+        margin-top: 37px;
+        width: 544px;
+        color: #000;
+        text-shadow: 0 4px 4px rgba(115, 187, 201, 0.25);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+    .content button {
+        margin-top: 35px;
+    }
+
+    .content .right {
+        width: 618px;
+
+    }
+    .content .right img {
+        width: 30%;
+    }
+    .content h1{
+        color:black;
+        width: 275px;
+        font-weight: bold;
+    }
+    .content button {
+        background: #4834D4;
+        color: #FFFFFF;
+        padding: 12px;
+        letter-spacing: 1.1px;
+    }
+
+    section .container .content{
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .content .right {
+        background: url("{% static 'images/person.png' %}") center/cover;
+    }
+    .content .right {
+        width: 100%;
+        height: 500px;
+    }
+    /*navbarNav*/
+    .content p {
+        margin-top: 37px;
+        width: 544px;
+        color: #000;
+        text-shadow: 0 4px 4px rgba(115, 187, 201, 0.25);
+        font-family: 'Boldly Missy', sans-serif;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+
+    #joinUsButton {
+        border: 1px solid #C63D2F;
+    }
+
+
+
+
+
+</style>
+{% endblock %}
+
+<body>
+
+    <section>
+        <!--Nav-->
+        {% include 'manga/nav.html' %}
+         <!--End Nav-->
+        {% block content %}
+         <div class="container">
+            <div class="content">
+
+                <div class="left ">
+                    <h1>WELCOME TO O’SCANS</h1>
+                    <p>
+                        The ideal platform for reading manga 
+                        scans without any interruption from 
+                        unwanted links. Additionally, leverage 
+                        our API to create your own website and 
+                        easily obtain information on a specific
+                        manga, retrieve specific pages, or chapters.
+                    </p>
+                    <button>
+                        Découvrir maintenant
+                    </button>
+                </div>
+    
+                <div class="right">
+                </div>
+
+
+            </div>
+         </div>
+        {% endblock %}
+    </section>
+
+    
+
+    <!-- Bootstrap JS and jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-Tc5mynrZmytyeVK1UR9S6OByK2Dw7rLrfECKWeKt2JUuPRXfJqS8buS61LOxG8Uj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+
+        const joinUsButton = document.getElementById("joinUsButton");
+
+        joinUsButton.addEventListener("mouseenter", function() {
+            this.classList.add("oldschool-button", "hover-true");
+            {% block javascript %}
+                this.style.backgroundColor = "#FCE9F1";
+
+                //background: #C63D2F;
+                this.style.color = "#000";
+            {% endblock %}
+            this.style.border = "2px solid #080202";
+            this.style.boxShadow = "-4px 4px 0px 0px #000";
+        });
+
+        joinUsButton.addEventListener("mouseleave", function() {
+            this.classList.remove("oldschool-button", "hover-true");
+            this.classList.add("hover-false");
+            this.style.backgroundColor = "";
+            this.style.color = "";
+            this.style.border = "";
+            this.style.boxShadow = "";
+        });
+
+    </script>
+</body>
+</html>
