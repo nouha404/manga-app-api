@@ -63,4 +63,3 @@ class MangaPages(admin.ModelAdmin):
     list_display = ('name', 'number_chapter',)
     list_per_page = 10
     list_filter = ('informations',)
-

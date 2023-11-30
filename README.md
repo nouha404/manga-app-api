@@ -6,8 +6,14 @@
 
 <p></p>
 
-##### manga
-<img src="./images/manga.png" />
+##### manga avec les vrais données
+<img src="./images/1.png" />
+<p></p>
+<img src="./images/2.png" />
+<p></p>
+<img src="./images/3.png" />
+<p></p>
+<img src="./images/33.png" />
 
 <br/>
 
@@ -21,3 +27,5 @@
 
 ### UPDATE
 <img src="./images/API001.png" />
+
+### A faire prochainnement : Gerer la partie recherche des mangas 

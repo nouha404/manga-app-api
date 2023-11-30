@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 # from tinydb import TinyDB
 # from pathlib import Path
 from pprint import pprint
+
 from scrapping.models import (
     Informations,
     Pages
@@ -30,12 +31,16 @@ def get_informations(url_manga_specifique: str):
     category = search_category_dt.find_next_sibling('dd').text
     resume = soup.find('div', class_='well').p.text
     manga_title = soup.find('h2', class_='widget-title').text
+    image = soup.find("img", class_="img-responsive")
+    image_src = image.get("src")
+
     existing_info = Informations.objects.filter(
         release_date=release_date,
         author=author,
         category=category,
         resume=resume,
-        manga_title=manga_title
+        manga_title=manga_title,
+        image_link=image_src
     ).first()
     if not existing_info:
         informations = Informations.objects.create(
@@ -44,6 +49,7 @@ def get_informations(url_manga_specifique: str):
             resume=resume,
             category=category,
             manga_title=manga_title,
+            image_link=image_src
         )
         return informations
     else:
@@ -96,7 +102,7 @@ def get_scan_names(informations, all_chapters: list):
         else informations
     )
     for url_in_alchaptre in all_chapters:
-        print(f'recuperation des nom dans{url_in_alchaptre}')
+        print(f'recuperation des nom dans {url_in_alchaptre}')
         response = requests.get(url_in_alchaptre, headers=headers)
         soup = BeautifulSoup(response.content, 'html.parser')
         # get names
@@ -123,6 +129,7 @@ def get_scan_names(informations, all_chapters: list):
             ).first()
 
             if not existing_page:
+
                 Pages.objects.create(
                     informations=informations,
                     name=name,
@@ -143,6 +150,11 @@ for manga_name, url in urls:
         get_scan_names(existing_informations, all_chapters_for_specifique_url)
     else:
         print(f'Aucun nouveau chapitre trouvé pour {manga_name}.')
+
+
+# Fonction pour télécharger et enregistrer les images
+
+
 
 
 def remove_duplicate_pages():

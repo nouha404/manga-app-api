@@ -1,0 +1,417 @@
+{% extends 'manga/base.html' %}
+
+{% block stylesheet %}
+        {{block.super}}
+        <style>
+                .container {
+                }
+                .content {
+
+                }
+                .content .col {
+                        color: #C63D2F;
+                        font-family: 'Boldly Missy', sans-serif;
+                        font-size: 25px;
+                        font-style: normal;
+                        font-weight: 700;
+                        line-height: 100%;
+                        letter-spacing: 2px;
+                }
+                .content .row {
+                        width: 100%;
+                }
+                .content .search {
+                        margin-top: 49px;
+                        border-radius: 30px;
+                        /*background: #D9D9D9;*/
+                        box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+                        height: 8vh;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 15px;
+                        border: 0 solid #e5e7eb;
+                        background: #C63D2F;
+
+                }
+
+                .content .search svg {
+                        margin-right: 20px;
+                }
+
+                .content .search input {
+                        border: none;
+                        outline: none;
+                        background: transparent;
+                        flex: 1;
+                        height: 100%;
+                        font-size: 16px;
+                        color: white;
+                        font-family: 'Boldly Missy', sans-serif;
+                }
+                .content .search input::placeholder {
+                        font-family: 'Boldly Missy', sans-serif;
+                }
+                .container .datas {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                        margin-top: 50px;
+                        padding-top: 20px;
+
+                }
+
+                .container .datas .card {
+                        height: 400px;
+
+                        padding: 20px 0 0 0;
+                        width: calc(30% - 20px);
+                        background: #FCE9F1;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-bottom: 20px;
+
+                }
+                .container .datas .card img {
+                        height: 300px;
+                        margin-top: -8px;
+                        object-fit: cover;
+                        width: 95%;
+                }
+
+                section {
+                        height: auto;
+                        background: #FAFAF7;
+
+                }
+                .card-body .card-title {
+                        color: #080202;
+                        font-family: 'Boldly Missy', sans-serif;
+                        font-size: 20px;
+                        font-style: normal;
+                        font-weight: 700;
+                        line-height: 100%;
+                        letter-spacing: 2px;
+                }
+                .card-body .card-author {
+                        color: #080202;
+                        font-family: 'Boldly Missy', sans-serif;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 100%; /* 14px */
+                        letter-spacing: 1.4px;
+                }
+
+
+
+                section nav #navbarNav ul.navbar-nav {
+                        background: #C63D2F;
+                }
+                .container .logo {
+                        color: #C63D2F;
+                }
+                .card-body {
+                        width: 100%;
+                }
+
+
+
+
+                /*
+                .search span {
+                    color: #080202;
+
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 100%;
+                    letter-spacing: 1.4px;
+                }
+                .datas .search a {
+                    width: 70%;
+                    height: 7vh;
+                    display: flex;
+                    padding: 16px 18px;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    border: 1px solid #080202;
+                    background: #FCE9F1;
+                    box-shadow: -4px 4px 0px 0px #000;
+                    text-decoration: none;
+
+
+                    color: #C63D2F;
+                    font-size: 20px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: 100%;
+                    letter-spacing: 2px;
+
+
+                }
+                */
+
+                .content-card {
+                    border: 1px solid yellow;
+                }
+                /*
+                .content-card .row {
+                    border: 1px solid red;
+                    width: 60%;
+                }
+                .row h3 {
+                    color: #080202;
+
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: 100%;
+                    letter-spacing: 1.6px;
+                }
+                */
+
+
+
+        .personalised {
+            border-radius: 30px;
+            background: #FFF;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            padding: 15px;
+        }
+        .personalised span {
+            color: #080202;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 100%; /* 16px */
+            letter-spacing: 1.6px;
+
+
+        }
+
+        .imageP {
+            display: flex;
+            justify-content: center;
+            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+        }
+        .cat-span {
+            display: inline-flex;
+            justify-content: center;
+            box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+            align-items: center;
+            border-radius: 999px;
+            background: #C63D2F;
+            color: white;padding: 11px 18px;
+
+        }
+        .slt {
+            border-radius: 30px;
+            background: #FFF;
+            box-shadow: 0 4px 4px 0px rgba(0, 0, 0, 0.25);
+            width: 1025px;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        .date h4, .categories h2 , .icone-resume h2{
+            color: #080202;
+
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 100%; /* 16px */
+        letter-spacing: 1.6px;
+        }
+
+        .text-resume p,.date span {
+            color: #080202;
+            margin-left: 20px;
+            font-style: normal;
+            letter-spacing: 2px;
+        }
+        .flex-span {
+            margin-left: 20px;
+        }
+        </style>
+{% endblock %}
+
+
+
+
+
+{% block content %}
+        <div class="container">
+                <div class="content">
+                        <div class="row">
+                                <div class="col ">
+                                    <a href="{% url 'manga-view' %}">
+                                        <svg class="" width="63" height="22" viewBox="0 0 63 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <g filter="url(#filter0_d_19_443)">
+                                            <path d="M60.6603 9L52 0.339746L43.3397 9L52 17.6603L60.6603 9ZM2 9L17 17.6603V0.339746L2 9ZM52 7.5L15.5 7.5V10.5L52 10.5V7.5Z" fill="#C63D2F"/>
+                                          </g>
+                                          <defs>
+                                            <filter id="filter0_d_19_443" x="0" y="0.339752" width="62.6602" height="21.3205" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                              <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                              <feOffset dy="2"/>
+                                              <feGaussianBlur stdDeviation="1"/>
+                                              <feComposite in2="hardAlpha" operator="out"/>
+                                              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                                              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_19_443"/>
+                                              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_19_443" result="shape"/>
+                                            </filter>
+                                          </defs>
+                                        </svg>
+                                    </a>
+                                </div>
+
+                        </div>
+
+                </div>
+                <div class="datas">
+                    <div class="row" style="width: 100%;" >
+
+                       <a class="mx-3 col-2 d-inline-block navbar-brand text-center text-decoration-none" id="joinUsButton" href="#" style="display: flex; padding: 11px 13px; justify-content: space-around; align-items: center; gap: 10px; border: 1px solid #080202; background: #FCE9F1; box-shadow: -4px 4px 0px 0px #000;">
+                           {{info.manga_title}}
+                            <svg width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path id="Vector" d="M8 1.5L1 8.5M8 1.5H2.16667M8 1.5V7.33333"/>
+                            </svg>
+                        </a>
+                        <span class="col-12 mt-4">{{info.author}}</span>
+
+                    </div>
+                    <div class="row slt justify-content-center mt-5">
+                        <div class="col-6">
+                            <div class="icone-resume">
+                                <h2> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.8 18H13.2V10.8H10.8V18ZM12 8.4C12.34 8.4 12.625 8.285 12.855 8.055C13.085 7.825 13.2 7.54 13.2 7.2C13.2 6.86 13.085 6.575 12.855 6.345C12.625 6.115 12.34 6 12 6C11.66 6 11.375 6.115 11.145 6.345C10.915 6.575 10.8 6.86 10.8 7.2C10.8 7.54 10.915 7.825 11.145 8.055C11.375 8.285 11.66 8.4 12 8.4ZM12 24C10.34 24 8.78 23.685 7.32 23.055C5.86 22.425 4.59 21.57 3.51 20.49C2.43 19.41 1.575 18.14 0.945 16.68C0.315 15.22 0 13.66 0 12C0 10.34 0.315 8.78 0.945 7.32C1.575 5.86 2.43 4.59 3.51 3.51C4.59 2.43 5.86 1.575 7.32 0.945C8.78 0.315 10.34 0 12 0C13.66 0 15.22 0.315 16.68 0.945C18.14 1.575 19.41 2.43 20.49 3.51C21.57 4.59 22.425 5.86 23.055 7.32C23.685 8.78 24 10.34 24 12C24 13.66 23.685 15.22 23.055 16.68C22.425 18.14 21.57 19.41 20.49 20.49C19.41 21.57 18.14 22.425 16.68 23.055C15.22 23.685 13.66 24 12 24ZM12 21.6C14.68 21.6 16.95 20.67 18.81 18.81C20.67 16.95 21.6 14.68 21.6 12C21.6 9.32 20.67 7.05 18.81 5.19C16.95 3.33 14.68 2.4 12 2.4C9.32 2.4 7.05 3.33 5.19 5.19C3.33 7.05 2.4 9.32 2.4 12C2.4 14.68 3.33 16.95 5.19 18.81C7.05 20.67 9.32 21.6 12 21.6Z" fill="black"/>
+                                </svg> Résumé</h2>
+                            </div>
+                            <div class="text-resume">
+                                 <p>{{info.resume}}</p>
+                            </div>
+
+                            <div class="categories">
+                                 <h2>
+                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M4.42105 10.8L11.3684 0L18.3158 10.8H4.42105ZM18.3158 24C16.7368 24 15.3947 23.475 14.2895 22.425C13.1842 21.375 12.6316 20.1 12.6316 18.6C12.6316 17.1 13.1842 15.825 14.2895 14.775C15.3947 13.725 16.7368 13.2 18.3158 13.2C19.8947 13.2 21.2368 13.725 22.3421 14.775C23.4474 15.825 24 17.1 24 18.6C24 20.1 23.4474 21.375 22.3421 22.425C21.2368 23.475 19.8947 24 18.3158 24ZM0 23.4V13.8H10.1053V23.4H0ZM18.3158 21.6C19.2 21.6 19.9474 21.31 20.5579 20.73C21.1684 20.15 21.4737 19.44 21.4737 18.6C21.4737 17.76 21.1684 17.05 20.5579 16.47C19.9474 15.89 19.2 15.6 18.3158 15.6C17.4316 15.6 16.6842 15.89 16.0737 16.47C15.4632 17.05 15.1579 17.76 15.1579 18.6C15.1579 19.44 15.4632 20.15 16.0737 20.73C16.6842 21.31 17.4316 21.6 18.3158 21.6ZM2.52632 21H7.57895V16.2H2.52632V21ZM8.90526 8.4H13.8316L11.3684 4.62L8.90526 8.4Z" fill="black"/>
+                                    </svg>
+                                     Catégories
+                                 </h2>
+
+                                    <div class="flex-span mt-3 pb-4">
+                                     <span class="cat-span ">{{info.category}}</span>
+                                    </div>
+
+
+                            </div>
+
+                            <div class="date">
+                                <h4>
+                                    <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M6 14.5C5.3 14.5 4.70833 14.2583 4.225 13.775C3.74167 13.2917 3.5 12.7 3.5 12C3.5 11.3 3.74167 10.7083 4.225 10.225C4.70833 9.74167 5.3 9.5 6 9.5C6.7 9.5 7.29167 9.74167 7.775 10.225C8.25833 10.7083 8.5 11.3 8.5 12C8.5 12.7 8.25833 13.2917 7.775 13.775C7.29167 14.2583 6.7 14.5 6 14.5ZM2 20C1.45 20 0.979167 19.8042 0.5875 19.4125C0.195833 19.0208 0 18.55 0 18V4C0 3.45 0.195833 2.97917 0.5875 2.5875C0.979167 2.19583 1.45 2 2 2H3V0H5V2H13V0H15V2H16C16.55 2 17.0208 2.19583 17.4125 2.5875C17.8042 2.97917 18 3.45 18 4V18C18 18.55 17.8042 19.0208 17.4125 19.4125C17.0208 19.8042 16.55 20 16 20H2ZM2 18H16V8H2V18ZM2 6H16V4H2V6Z" fill="black"/>
+                                    </svg>
+                                    Date de sortie
+                                </h4>
+
+                                 <span>{{info.release_date}}</span>
+
+
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-6">
+                            <div class="imageP">
+                                <svg width="441" height="441" viewBox="0 0 441 441" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                  <g filter="url(#filter0_d_44_538)">
+                                    <path d="M437 216.5C437 336.07 340.07 433 220.5 433C100.93 433 4 336.07 4 216.5C4 96.9304 100.93 0 220.5 0C340.07 0 437 96.9304 437 216.5Z" fill="url(#pattern0)" shape-rendering="crispEdges"/>
+                                  </g>
+                                  <defs>
+                                    <filter id="filter0_d_44_538" x="0" y="0" width="441" height="441" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                      <feOffset dy="4"/>
+                                      <feGaussianBlur stdDeviation="2"/>
+                                      <feComposite in2="hardAlpha" operator="out"/>
+                                      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_44_538"/>
+                                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_44_538" result="shape"/>
+                                    </filter>
+                                    <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                      <use xlink:href="#image0_44_538" transform="translate(0.166667) scale(0.00189394)"/>
+                                    </pattern>
+                                    <image id="image0_44_538" width="352" height="528" xlink:href="{{ info.image_link }}"/>
+                                  </defs>
+                                </svg>
+
+                            </div>
+                         </div>
+                        <!--
+                        <div class="col-7 bg-danger">
+                            <div class="  border personalised">
+                            <div class="">
+                                <span class="">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.8 18H13.2V10.8H10.8V18ZM12 8.4C12.34 8.4 12.625 8.285 12.855 8.055C13.085 7.825 13.2 7.54 13.2 7.2C13.2 6.86 13.085 6.575 12.855 6.345C12.625 6.115 12.34 6 12 6C11.66 6 11.375 6.115 11.145 6.345C10.915 6.575 10.8 6.86 10.8 7.2C10.8 7.54 10.915 7.825 11.145 8.055C11.375 8.285 11.66 8.4 12 8.4ZM12 24C10.34 24 8.78 23.685 7.32 23.055C5.86 22.425 4.59 21.57 3.51 20.49C2.43 19.41 1.575 18.14 0.945 16.68C0.315 15.22 0 13.66 0 12C0 10.34 0.315 8.78 0.945 7.32C1.575 5.86 2.43 4.59 3.51 3.51C4.59 2.43 5.86 1.575 7.32 0.945C8.78 0.315 10.34 0 12 0C13.66 0 15.22 0.315 16.68 0.945C18.14 1.575 19.41 2.43 20.49 3.51C21.57 4.59 22.425 5.86 23.055 7.32C23.685 8.78 24 10.34 24 12C24 13.66 23.685 15.22 23.055 16.68C22.425 18.14 21.57 19.41 20.49 20.49C19.41 21.57 18.14 22.425 16.68 23.055C15.22 23.685 13.66 24 12 24ZM12 21.6C14.68 21.6 16.95 20.67 18.81 18.81C20.67 16.95 21.6 14.68 21.6 12C21.6 9.32 20.67 7.05 18.81 5.19C16.95 3.33 14.68 2.4 12 2.4C9.32 2.4 7.05 3.33 5.19 5.19C3.33 7.05 2.4 9.32 2.4 12C2.4 14.68 3.33 16.95 5.19 18.81C7.05 20.67 9.32 21.6 12 21.6Z" fill="black"/>
+                                </svg>
+                                Résumé
+                            </span>
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+
+
+                        </div>
+
+                        <div class="col bg-success">
+
+                        </div>
+
+
+
+                    <div class="content-card d-flex justify-content-center  ">
+
+                        <div class="row mt-5">
+
+                            <h3> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M10.8 18H13.2V10.8H10.8V18ZM12 8.4C12.34 8.4 12.625 8.285 12.855 8.055C13.085 7.825 13.2 7.54 13.2 7.2C13.2 6.86 13.085 6.575 12.855 6.345C12.625 6.115 12.34 6 12 6C11.66 6 11.375 6.115 11.145 6.345C10.915 6.575 10.8 6.86 10.8 7.2C10.8 7.54 10.915 7.825 11.145 8.055C11.375 8.285 11.66 8.4 12 8.4ZM12 24C10.34 24 8.78 23.685 7.32 23.055C5.86 22.425 4.59 21.57 3.51 20.49C2.43 19.41 1.575 18.14 0.945 16.68C0.315 15.22 0 13.66 0 12C0 10.34 0.315 8.78 0.945 7.32C1.575 5.86 2.43 4.59 3.51 3.51C4.59 2.43 5.86 1.575 7.32 0.945C8.78 0.315 10.34 0 12 0C13.66 0 15.22 0.315 16.68 0.945C18.14 1.575 19.41 2.43 20.49 3.51C21.57 4.59 22.425 5.86 23.055 7.32C23.685 8.78 24 10.34 24 12C24 13.66 23.685 15.22 23.055 16.68C22.425 18.14 21.57 19.41 20.49 20.49C19.41 21.57 18.14 22.425 16.68 23.055C15.22 23.685 13.66 24 12 24ZM12 21.6C14.68 21.6 16.95 20.67 18.81 18.81C20.67 16.95 21.6 14.68 21.6 12C21.6 9.32 20.67 7.05 18.81 5.19C16.95 3.33 14.68 2.4 12 2.4C9.32 2.4 7.05 3.33 5.19 5.19C3.33 7.05 2.4 9.32 2.4 12C2.4 14.68 3.33 16.95 5.19 18.81C7.05 20.67 9.32 21.6 12 21.6Z" fill="black"/>
+                                </svg> Resume</h3>
+                        <p>
+                            {{info.resume}}
+                        </p>
+                        </div>
+                        -->
+
+                    </div>
+
+
+
+
+
+                </div>
+
+{% endblock %}
+
+{% block javascript %}
+this.style.backgroundColor = "#C63D2F";
+this.style.color = "white";
+{% endblock %}
+
+
