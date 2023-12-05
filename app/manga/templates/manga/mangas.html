@@ -31,11 +31,17 @@
                         padding: 0 15px;
                         border: 0 solid #e5e7eb;
                         background: #C63D2F;
+                        width: 100%;
 
                 }
 
                 .content .search svg {
                         margin-right: 20px;
+                }
+                form {
+
+
+                        width: 100%;
                 }
 
                 .content .search input {
@@ -44,12 +50,14 @@
                         background: transparent;
                         flex: 1;
                         height: 100%;
+                        width: 100%;
                         font-size: 16px;
                         color: white;
                         font-family: 'Boldly Missy', sans-serif;
                 }
                 .content .search input::placeholder {
                         font-family: 'Boldly Missy', sans-serif;
+
                 }
                 .container .datas {
                         display: flex;
@@ -138,31 +146,32 @@
                                         Manga
                                 </div>
                                 <div class="search" >
-                                        <svg width="26" height="26" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path id="Vector" d="M33.2 36L20.6 23.4C19.6 24.2 18.45 24.8333 17.15 25.3C15.85 25.7667 14.4667 26 13 26C9.36667 26 6.29167 24.7417 3.775 22.225C1.25833 19.7083 0 16.6333 0 13C0 9.36667 1.25833 6.29167 3.775 3.775C6.29167 1.25833 9.36667 0 13 0C16.6333 0 19.7083 1.25833 22.225 3.775C24.7417 6.29167 26 9.36667 26 13C26 14.4667 25.7667 15.85 25.3 17.15C24.8333 18.45 24.2 19.6 23.4 20.6L36 33.2L33.2 36ZM13 22C15.5 22 17.625 21.125 19.375 19.375C21.125 17.625 22 15.5 22 13C22 10.5 21.125 8.375 19.375 6.625C17.625 4.875 15.5 4 13 4C10.5 4 8.375 4.875 6.625 6.625C4.875 8.375 4 10.5 4 13C4 15.5 4.875 17.625 6.625 19.375C8.375 21.125 10.5 22 13 22Z" fill="white"/>
-                                        </svg>
-                                        <form action="" id="searchForm">
-                                                {% csrf_token %}
-                                                <input type="text" id="searchInput" placeholder="Search a manga"/>
+                                        <form method="POST" id="searchForm" action="{% url 'manga-filtre' %}" >
+                                                 {% csrf_token %}
+                                                {{form}}
 
                                         </form>
                                 </div>
-
 
                         </div>
 
                 </div>
                 <div class="datas">
+                        {% block datas %}
 
-                        {% for info in informations %}
-                                <div class="card">
-                                        <img src="{{ info.image_link }}" class="card-img-top" alt="cover de {{info.manga_tile}}">
-                                        <div class="card-body">
-                                                <h5 class="card-title">{{ info.manga_title}}</h5>
-                                                <a href="{% url 'manga-details' pk=info.pk %}" class="card-author text-decoration-none">{{ info.author}}</a>
+                                {% for info in informations %}
+                                        <div class="card">
+                                                <img src="{{ info.image_link }}" class="card-img-top" alt="cover de {{info.manga_tile}}">
+                                                <div class="card-body">
+                                                        <h5 class="card-title">{{ info.manga_title}}</h5>
+                                                        <a href="{% url 'manga-details' pk=info.pk %}" class="card-author text-decoration-none">{{ info.author}}</a>
+                                                </div>
                                         </div>
-                                </div>
-                        {% endfor %}
+                                {% endfor %}
+
+                        {%endblock %}
+
+
 
 
                 </div>
@@ -174,6 +183,20 @@ this.style.backgroundColor = "#C63D2F";
 this.style.color = "white";
 
 
+$(document).ready(function() {
+        // L'événement du formulaire
+        $('#searchForm').submit(function(e) {
+            e.preventDefault();
 
-
+            // Soumission via AJAX
+            $.ajax({
+                type: 'POST',
+                url: '{% url "manga-filtre" %}',
+                data: $('#searchForm').serialize(),
+                success: function(response) {
+                    $('.datas').html(response);
+                }
+            });
+        });
+    });
 {% endblock %}
