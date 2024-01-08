@@ -1,0 +1,309 @@
+{% extends 'manga/base.html' %}
+
+{% block stylesheet %}
+        {{block.super}}
+        <style>
+                .container {
+                }
+                .content {
+
+                }
+                .content .col {
+                        color: #C63D2F;
+                        font-family: 'Boldly Missy', sans-serif;
+                        font-size: 25px;
+                        font-style: normal;
+                        font-weight: 700;
+                        line-height: 100%;
+                        letter-spacing: 2px;
+                }
+                .content .row {
+                        width: 100%;
+                }
+                .content .search {
+                        margin-top: 49px;
+                        border-radius: 30px;
+                        /*background: #D9D9D9;*/
+                        box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+                        height: 8vh;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 15px;
+                        border: 0 solid #e5e7eb;
+                        background: #C63D2F;
+
+                }
+
+                .content .search svg {
+                        margin-right: 20px;
+                }
+
+                .content .search input {
+                        border: none;
+                        outline: none;
+                        background: transparent;
+                        flex: 1;
+                        height: 100%;
+                        font-size: 16px;
+                        color: white;
+                        font-family: 'Boldly Missy', sans-serif;
+                }
+                .content .search input::placeholder {
+                        font-family: 'Boldly Missy', sans-serif;
+                }
+                .container .datas {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                        margin-top: 50px;
+                        padding-top: 20px;
+
+                }
+
+                .container .datas .card {
+                        height: 400px;
+
+                        padding: 20px 0 0 0;
+                        width: calc(30% - 20px);
+                        background: #FCE9F1;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-bottom: 20px;
+
+                }
+                .container .datas .card img {
+                        height: 300px;
+                        margin-top: -8px;
+                        object-fit: cover;
+                        width: 95%;
+                }
+
+                section {
+                        height: auto;
+                        background: #FAFAF7;
+
+                }
+                .card-body .card-title {
+                        color: #080202;
+                        font-family: 'Boldly Missy', sans-serif;
+                        font-size: 20px;
+                        font-style: normal;
+                        font-weight: 700;
+                        line-height: 100%;
+                        letter-spacing: 2px;
+                }
+                .card-body .card-author {
+                        color: #080202;
+                        font-family: 'Boldly Missy', sans-serif;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 100%; /* 14px */
+                        letter-spacing: 1.4px;
+                }
+
+
+
+                section nav #navbarNav ul.navbar-nav {
+                        background: #C63D2F;
+                }
+                .container .logo {
+                        color: #C63D2F;
+                }
+                .card-body {
+                        width: 100%;
+                }
+
+
+                .content-card {
+                    border: 1px solid yellow;
+                }
+
+
+
+
+        .personalised {
+            border-radius: 30px;
+            background: #FFF;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            padding: 15px;
+        }
+        .personalised span {
+            color: #080202;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 100%; /* 16px */
+            letter-spacing: 1.6px;
+
+
+        }
+
+        .imageP {
+            display: flex;
+            justify-content: center;
+            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+        }
+        .cat-span {
+            display: inline-flex;
+            justify-content: center;
+            box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+            align-items: center;
+            border-radius: 999px;
+            background: #C63D2F;
+            color: white;padding: 11px 18px;
+
+        }
+        .slt {
+            border-radius: 30px;
+            background: #FFF;
+            box-shadow: 0 4px 4px 0px rgba(0, 0, 0, 0.25);
+            width: 1025px;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        .date h4, .categories h2 , .icone-resume h2{
+            color: #080202;
+
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 100%; /* 16px */
+        letter-spacing: 1.6px;
+        }
+
+        .text-resume p,.date span {
+            color: #080202;
+            margin-left: 20px;
+            font-style: normal;
+            letter-spacing: 2px;
+        }
+        .flex-span {
+            margin-left: 20px;
+        }
+
+        /*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/css/lightbox.min.css">
+        */
+
+        .content .custom-color {
+             color: #C63D2F;
+        }
+        .custom-search {
+
+        }
+        .container {
+
+                                                                                                                    }
+
+        </style>
+{% endblock %}
+
+
+
+
+
+{% block content %}
+        <div class="content">
+                 <div class="row">
+                                <div class="col mx-5">
+                                    <a href="{% url 'manga-details' pk=page.informations.pk %}">
+                                        <svg class="" width="63" height="22" viewBox="0 0 63 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <g filter="url(#filter0_d_19_443)">
+                                            <path d="M60.6603 9L52 0.339746L43.3397 9L52 17.6603L60.6603 9ZM2 9L17 17.6603V0.339746L2 9ZM52 7.5L15.5 7.5V10.5L52 10.5V7.5Z" fill="#C63D2F"/>
+                                          </g>
+                                          <defs>
+                                            <filter id="filter0_d_19_443" x="0" y="0.339752" width="62.6602" height="21.3205" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                              <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                              <feOffset dy="2"/>
+                                              <feGaussianBlur stdDeviation="1"/>
+                                              <feComposite in2="hardAlpha" operator="out"/>
+                                              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                                              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_19_443"/>
+                                              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_19_443" result="shape"/>
+                                            </filter>
+                                          </defs>
+                                        </svg>
+                                    </a>
+                                </div>
+
+
+
+                </div>
+
+                <h1 class="text-center w-100 mt-4 mb-4 custom-color">
+                        Chapitre de {{manga_title}}
+                </h1>
+
+
+
+        </div>
+        <div class="datas">
+
+            <div class="row">
+             {% for chapter in chapters %}
+                <div class="col-md-4">
+                    <div class="card mb-4 box-shadow custom-card">
+
+                        <div class="card-body">
+                            <p class="card-text">{{ chapter.name }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a type="button" class="btn btn-sm btn-outline-secondary"
+                                       href="{% url 'manga-spe-chapter' manga_title=manga_title.lower pk=chapter.number %}">Lire</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            {% endfor %}
+
+            </div>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if chapters.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ chapters.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ chapters.number }} of {{ chapters.paginator.num_pages }}</span>
+                </li>
+
+                {% if chapters.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ chapters.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ chapters.paginator.num_pages }}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+
+
+
+        </div>
+
+{%endblock %}
+

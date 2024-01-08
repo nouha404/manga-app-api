@@ -116,61 +116,10 @@
                 }
 
 
-
-
-                /*
-                .search span {
-                    color: #080202;
-
-                    font-size: 14px;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: 100%;
-                    letter-spacing: 1.4px;
-                }
-                .datas .search a {
-                    width: 70%;
-                    height: 7vh;
-                    display: flex;
-                    padding: 16px 18px;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 10px;
-                    border: 1px solid #080202;
-                    background: #FCE9F1;
-                    box-shadow: -4px 4px 0px 0px #000;
-                    text-decoration: none;
-
-
-                    color: #C63D2F;
-                    font-size: 20px;
-                    font-style: normal;
-                    font-weight: 700;
-                    line-height: 100%;
-                    letter-spacing: 2px;
-
-
-                }
-                */
-
                 .content-card {
                     border: 1px solid yellow;
                 }
-                /*
-                .content-card .row {
-                    border: 1px solid red;
-                    width: 60%;
-                }
-                .row h3 {
-                    color: #080202;
 
-                    font-size: 16px;
-                    font-style: normal;
-                    font-weight: 500;
-                    line-height: 100%;
-                    letter-spacing: 1.6px;
-                }
-                */
 
 
 
@@ -276,14 +225,20 @@
                 </div>
                 <div class="datas">
                     <div class="row" style="width: 100%;" >
-
-                       <a class="mx-3 col-2 d-inline-block navbar-brand text-center text-decoration-none" id="joinUsButton" href="#" style="display: flex; padding: 11px 13px; justify-content: space-around; align-items: center; gap: 10px; border: 1px solid #080202; background: #FCE9F1; box-shadow: -4px 4px 0px 0px #000;">
-                           {{info.manga_title}}
+                        {% if page_id %}
+                       <a class="mx-3 col-2 d-inline-block navbar-brand text-center text-decoration-none" id="joinUsButton" href="{% url 'manga-chapters' pk=page_id  %}" style="display: flex; padding: 11px 13px; justify-content: space-around; align-items: center; gap: 10px; border: 1px solid #080202; background: #FCE9F1; box-shadow: -4px 4px 0px 0px #000;">
+                           Read {{info.manga_title}}
                             <svg width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path id="Vector" d="M8 1.5L1 8.5M8 1.5H2.16667M8 1.5V7.33333"/>
                             </svg>
                         </a>
+                        {% endif %}
+
+
+
                         <span class="col-12 mt-4">{{info.author}}</span>
+
+
 
                     </div>
                     <div class="row slt justify-content-center mt-5">

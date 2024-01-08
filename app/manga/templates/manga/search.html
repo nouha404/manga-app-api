@@ -1,0 +1,16 @@
+{% extends 'manga/mangas.html' %}
+
+
+
+
+{% block datas %}
+    {% for info in informations %}
+        <div class="card">
+            <img src="{{ info.image_link }}" class="card-img-top" alt="cover de {{info.manga_tile}}">
+            <div class="card-body">
+                <h5 class="card-title">{{ info.manga_title}}</h5>
+                <a href="{% url 'manga-details' pk=info.pk %}" class="card-author text-decoration-none">{{ info.author}}</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

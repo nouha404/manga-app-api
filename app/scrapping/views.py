@@ -162,6 +162,7 @@ def get_specifique_information(request, manga_name: str):
     return Response(finding_infos)
 
 
+# super shortcut method
 def filtre_pages_by_chapter(chapter):
     return Pages.objects.filter(name__contains=chapter)
 
@@ -236,6 +237,78 @@ def get_specifique_chapter(request, manga_title: str, chapter: str):
 @api_view(['GET'])
 @authentication_classes([authentication.TokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
+def get_manga_chapter_with_only_manga_title(request, manga_title: str):
+    """
+        Get manga title based on a manga title.
+
+        This view allows authenticated users to retrieve manga information entries that contain a specified manga title.
+        It requires a valid token for authentication and enforces the 'IsAuthenticated' permission.
+
+        Parameters:
+            :type request: object
+            :param manga_title: (str): The manga title to search for. Case-insensitive.
+
+        Returns:
+            A list of manga information entries with matching manga titles.
+
+        Usage:
+            To access manga information for a specific manga title, make a GET request to the corresponding endpoint,
+            providing the manga title as a URL parameter.
+
+        Example:
+            ```
+            GET /api/get_manga_chapter_with_only_manga_title/?manga_titled=my_manga
+            ```
+        Note:
+            - Authentication with a valid token is required to access this view.
+            - Only users with the 'IsAuthenticated' permission are allowed to retrieve data.
+            - The manga title is treated in a case-insensitive manner.
+            - If the manga title is not found, a 404 error response is returned.
+
+    """
+
+    manga_name = manga_title.title()
+
+    pages = Pages.objects.filter(name__contains=manga_name)
+    serializers_pages = PagesSerializer(pages, many=True).data
+
+    finding_infos = []
+    is_founding = False
+
+    slug_manga_title = slugify(manga_title)
+    if manga_title == 'one piece' or manga_title.lower() == 'one piece':
+        slug_manga_title = 'one_piece'
+
+
+    for page in serializers_pages:
+        if manga_name in page['name']:
+            """
+            manga_id_personalized = int(page['name'].split("#")[1].split(":")[0])
+            info = {
+                'id': manga_id_personalized,
+                'name': page['name'],
+                'chapters': page['chapters'],
+            }
+            """
+
+            finding_infos.append(page['name'])
+            is_founding = True
+        """
+        for manga_chaptr in page['chapters']:
+            if manga_chaptr is not None and slug_manga_title in manga_chaptr:
+                pprint(manga_chaptr)
+        """
+
+    if not is_founding:
+        return Response(
+            {'error': f' {manga_name} not found, write the name correctly."'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    return Response(finding_infos)
+
+@api_view(['GET'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
 def get_specifique_chapter_title(request, manga_title: str, chapter: str):
     """
         Get the full title of a specific chapter of a manga.
@@ -292,7 +365,6 @@ def get_specifique_chapter_title(request, manga_title: str, chapter: str):
         )
 
     return Response(full_title)
-
 
 
 @api_view(['GET'])

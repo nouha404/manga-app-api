@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 
 
+
 class Informations(models.Model):
     release_date = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
@@ -24,10 +25,12 @@ class Informations(models.Model):
         super().save(*args, **kwargs)
 
 
+
 class Pages(models.Model):
     informations = models.ForeignKey(Informations, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=True)
     chapters = models.JSONField()
+    page_number = models.IntegerField(default=1)
 
     class Meta:
         verbose_name = 'Page'
@@ -35,8 +38,7 @@ class Pages(models.Model):
     def __str__(self):
         return self.name
 
-
-
     @property
     def number_chapter(self):
         return len(self.chapters) - 1
+

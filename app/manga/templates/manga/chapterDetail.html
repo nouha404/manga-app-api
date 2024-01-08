@@ -31,17 +31,11 @@
                         padding: 0 15px;
                         border: 0 solid #e5e7eb;
                         background: #C63D2F;
-                        width: 100%;
 
                 }
 
                 .content .search svg {
                         margin-right: 20px;
-                }
-                form {
-
-
-                        width: 100%;
                 }
 
                 .content .search input {
@@ -50,14 +44,12 @@
                         background: transparent;
                         flex: 1;
                         height: 100%;
-                        width: 100%;
                         font-size: 16px;
                         color: white;
                         font-family: 'Boldly Missy', sans-serif;
                 }
                 .content .search input::placeholder {
                         font-family: 'Boldly Missy', sans-serif;
-
                 }
                 .container .datas {
                         display: flex;
@@ -124,12 +116,87 @@
                 }
 
 
+                .content-card {
+                    border: 1px solid yellow;
+                }
 
 
 
 
+        .personalised {
+            border-radius: 30px;
+            background: #FFF;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            padding: 15px;
+        }
+        .personalised span {
+            color: #080202;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 100%; /* 16px */
+            letter-spacing: 1.6px;
 
 
+        }
+
+        .imageP {
+            display: flex;
+            justify-content: center;
+            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+        }
+        .cat-span {
+            display: inline-flex;
+            justify-content: center;
+            box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+            align-items: center;
+            border-radius: 999px;
+            background: #C63D2F;
+            color: white;padding: 11px 18px;
+
+        }
+        .slt {
+            border-radius: 30px;
+            background: #FFF;
+            box-shadow: 0 4px 4px 0px rgba(0, 0, 0, 0.25);
+            width: 1025px;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        .date h4, .categories h2 , .icone-resume h2{
+            color: #080202;
+
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 100%; /* 16px */
+        letter-spacing: 1.6px;
+        }
+
+        .text-resume p,.date span {
+            color: #080202;
+            margin-left: 20px;
+            font-style: normal;
+            letter-spacing: 2px;
+        }
+        .flex-span {
+            margin-left: 20px;
+        }
+
+
+
+        .content .custom-color {
+             color: #C63D2F;
+        }
+        .custom-search {
+
+        }
+        .container {
+
+                                                                                                                    }
 
         </style>
 {% endblock %}
@@ -139,75 +206,43 @@
 
 
 {% block content %}
-        <div class="container">
-                <div class="content">
-                     {% block search %}
-                        <div class="row">
-                                <div class="col">
-                                        Manga
-                                </div>
-                                <div class="search" >
-                                        <form method="POST" id="searchForm" action="{% url 'manga-filtre' %}" >
-                                                 {% csrf_token %}
-                                                {{form}}
+        <div class="content">
 
-                                        </form>
-                                </div>
-
+                 <div class="row">
+                        <div class="col mx-5">
+                            <a href="{% url 'manga-view' %}">
+                                <svg class="" width="63" height="22" viewBox="0 0 63 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <g filter="url(#filter0_d_19_443)">
+                                    <path d="M60.6603 9L52 0.339746L43.3397 9L52 17.6603L60.6603 9ZM2 9L17 17.6603V0.339746L2 9ZM52 7.5L15.5 7.5V10.5L52 10.5V7.5Z" fill="#C63D2F"/>
+                                  </g>
+                                  <defs>
+                                    <filter id="filter0_d_19_443" x="0" y="0.339752" width="62.6602" height="21.3205" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                      <feOffset dy="2"/>
+                                      <feGaussianBlur stdDeviation="1"/>
+                                      <feComposite in2="hardAlpha" operator="out"/>
+                                      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_19_443"/>
+                                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_19_443" result="shape"/>
+                                    </filter>
+                                  </defs>
+                                </svg>
+                            </a>
                         </div>
-                    {%endblock %}
-
                 </div>
+
                 <div class="datas">
-                        {% block datas %}
 
-                                {% for info in informations %}
+                    <div class="row">
+                             {% for chapter in chapters %}
                                         <div class="card">
-                                                <img src="{{ info.image_link }}" class="card-img-top" alt="cover de {{info.manga_tile}}">
-                                                <div class="card-body">
-                                                        <h5 class="card-title">{{ info.manga_title}}</h5>
-                                                        <a href="{% url 'manga-details' pk=info.pk %}" class="card-author text-decoration-none">{{ info.author}}</a>
-                                                </div>
+                                                <img src="{{ chapter }}"  alt="Image du chapitre" >
                                         </div>
-
-                                {% endfor %}
-
-
-
-
-
-
-
-                        {%endblock %}
-
-
-
-
-
-
+                            {% endfor %}
+                    </div>
                 </div>
 
-{% endblock %}
 
-{% block javascript %}
-this.style.backgroundColor = "#C63D2F";
-this.style.color = "white";
-
-
-$(document).ready(function() {
-        // L'événement du formulaire
-        $('#searchForm').submit(function(e) {
-            e.preventDefault();
-
-            // Soumission via AJAX
-            $.ajax({
-                type: 'POST',
-                url: '{% url "manga-filtre" %}',
-                data: $('#searchForm').serialize(),
-                success: function(response) {
-                    $('.datas').html(response);
-                }
-            });
-        });
-    });
-{% endblock %}
+        </div>
+{%endblock %}
