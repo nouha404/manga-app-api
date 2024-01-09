@@ -14,3 +14,4 @@ app/*/*/*/__pycache__/
 .venv/
 venv/
 .idea
+nginx

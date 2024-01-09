@@ -32,6 +32,15 @@ services:
       - POSTGRES_USER=devuser
       - POSTGRES_PASSWORD=changeme
       - DEBUG=1
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - app
+
 
 volumes:
   dev-db-data:
