@@ -56,24 +56,7 @@ def get_informations(url_manga_specifique: str):
         return existing_info
 
 
-urls = [
-    ('One Piece', 'https://www.scan-vf.net/one_piece'),
-    ('My Hero Academia', 'https://www.scan-vf.net/my-hero-academia'),
-    ('Jujutsu Kaisen', 'https://www.scan-vf.net/jujutsu-kaisen'),
-    ('Kingdom', 'https://www.scan-vf.net/kingdom'),
-    ('Boruto', 'https://www.scan-vf.net/boruto'),
-    ('Black Clover', 'https://www.scan-vf.net/black-clover'),
-    ('Attaque des titans', 'https://www.scan-vf.net/attaque-des-titans'),
-    ('Bleach', 'https://www.scan-vf.net/bleach'),
-    ('One Punch Man', 'https://www.scan-vf.net/one-punch-man'),
-    ('Manhwa Solo Leveling', 'https://www.scan-vf.net/solo-leveling'),
-    ('Hunter X Hunter', 'https://www.scan-vf.net/hunter-x-hunter'),
-]
 
-# refactoring of old process
-"""url_piece = 'https://www.scan-vf.net/one_piece'
-one_piece_informations = get_informations(url_piece)
-"""
 
 
 def get_all_chapters(url_manga_specifique: str):
@@ -139,6 +122,25 @@ def get_scan_names(informations, all_chapters: list):
 
 # refactoring of old process
 """get_scan_names(mha_informations, mha_all_chapters)
+"""
+
+urls = [
+    ('One Piece', 'https://www.scan-vf.net/one_piece'),
+    ('My Hero Academia', 'https://www.scan-vf.net/my-hero-academia'),
+    ('Jujutsu Kaisen', 'https://www.scan-vf.net/jujutsu-kaisen'),
+    ('Kingdom', 'https://www.scan-vf.net/kingdom'),
+    ('Boruto', 'https://www.scan-vf.net/boruto'),
+    ('Black Clover', 'https://www.scan-vf.net/black-clover'),
+    ('Attaque des titans', 'https://www.scan-vf.net/attaque-des-titans'),
+    ('Bleach', 'https://www.scan-vf.net/bleach'),
+    ('One Punch Man', 'https://www.scan-vf.net/one-punch-man'),
+    ('Manhwa Solo Leveling', 'https://www.scan-vf.net/solo-leveling'),
+    ('Hunter X Hunter', 'https://www.scan-vf.net/hunter-x-hunter'),
+]
+
+# refactoring of old process
+"""url_piece = 'https://www.scan-vf.net/one_piece'
+one_piece_informations = get_informations(url_piece)
 """
 
 for manga_name, url in urls:
