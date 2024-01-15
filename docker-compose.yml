@@ -19,7 +19,7 @@ services:
       - DB_HOST=db
       - DB_NAME=devdb
       - DB_USER=devuser
-      - DB_PASS=changeme
+      - DB_PASS=nouha12b
       - DEBUG=1
     depends_on:
       - db
@@ -30,8 +30,8 @@ services:
       - dev-db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=devdb
-      - POSTGRES_USER=devuser
-      - POSTGRES_PASSWORD=changeme
+      - POSTGRES_USER=rootuser
+      - POSTGRES_PASSWORD=nouha12b
       - DEBUG=1
   nginx:
     image: nginx:latest

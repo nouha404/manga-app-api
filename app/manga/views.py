@@ -95,7 +95,7 @@ class MangaChapterPagesView(DetailView):
         api_url = f'http://0.0.0.0:8000/api/mangas/api/{manga_title}/pages/'
         context['api_url'] = api_url
 
-        response = requests.get(api_url, headers={'Authorization': 'Token 2ca3d1d7f650ba231b01a28a574f58fabc9d004b'})
+        response = requests.get(api_url, headers={'Authorization': 'Token e31968b95f653921d3f44bb367764e39606dd576'})
         context['response'] = response
 
         if response.status_code != 200:
@@ -149,7 +149,7 @@ class MangaSpecifiqueChapter(DetailView):
         api_url = f'http://0.0.0.0:8000/api/mangas/api/search/{manga_title}/{chapter_number.parts[-1]}/'
 
         # Effectuez la requête à l'API
-        headers={'Authorization': 'Token 2ca3d1d7f650ba231b01a28a574f58fabc9d004b'}
+        headers={'Authorization': 'Token e31968b95f653921d3f44bb367764e39606dd576'}
         response = requests.get(api_url, headers=headers)
 
         # Vérifiez le statut de la réponse
@@ -165,6 +165,3 @@ class MangaSpecifiqueChapter(DetailView):
         else:
             error_message = f"API Request Failed. Status code: {response.status_code}"
             return HttpResponse(error_message)
-
-
-
